@@ -1,0 +1,64 @@
+package com.robertx22.mine_and_slash.commands.giveitems;
+
+import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.robertx22.mine_and_slash.commands.bases.UniqueRuneSuggestions;
+import com.robertx22.mine_and_slash.database.rarities.runes.UniqueRune;
+import com.robertx22.mine_and_slash.loot.blueprints.UniqueRuneBlueprint;
+import com.robertx22.mine_and_slash.loot.gens.UniqueRuneLootGen;
+import net.minecraft.command.CommandSource;
+import net.minecraft.command.Commands;
+import net.minecraft.command.arguments.EntityArgument;
+import net.minecraft.entity.player.PlayerEntity;
+
+import javax.annotation.Nullable;
+import java.util.Objects;
+
+public class GiveUniqueRune {
+    public static void register(CommandDispatcher<CommandSource> commandDispatcher) {
+        commandDispatcher.register(Commands.literal("giveuniquerune")
+                .requires(e -> e.hasPermissionLevel(2))
+                .then(Commands.argument("target", EntityArgument.player())
+                        .then(Commands.argument("uniqueID", StringArgumentType.word())
+                                .suggests(new UniqueRuneSuggestions())
+                                .then(Commands.argument("level", IntegerArgumentType.integer())
+                                        .then(Commands.argument("amount", IntegerArgumentType
+                                                .integer(1, 5000))
+                                                .executes(e -> execute(e.getSource(), EntityArgument
+                                                        .getPlayer(e, "target"), StringArgumentType
+                                                        .getString(e, "uniqueID"), IntegerArgumentType
+                                                        .getInteger(e, "level"), IntegerArgumentType
+                                                        .getInteger(e, "amount")
+
+                                                )))))));
+    }
+
+    private static int execute(CommandSource commandSource, @Nullable PlayerEntity player,
+                               String id, int lvl, int amount) {
+
+        if (Objects.isNull(player)) {
+            try {
+                player = commandSource.asPlayer();
+            } catch (CommandSyntaxException e) {
+                e.printStackTrace();
+                return 1;
+            }
+        }
+
+        UniqueRuneBlueprint blueprint = new UniqueRuneBlueprint(lvl, 0);
+
+        blueprint.setSpecificRarity(new UniqueRune().Rank());
+
+        blueprint.SetSpecificType(id);
+
+        blueprint.LevelRange = false;
+
+        for (int i = 0; i < amount; i++) {
+            player.addItemStackToInventory(UniqueRuneLootGen.Create(blueprint));
+        }
+
+        return 0;
+    }
+}
