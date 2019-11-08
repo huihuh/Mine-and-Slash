@@ -11,14 +11,14 @@ import com.robertx22.mine_and_slash.uncommon.capability.bases.BaseStorage;
 import com.robertx22.mine_and_slash.uncommon.capability.bases.ICommonCapability;
 import com.robertx22.mine_and_slash.uncommon.datasaving.base.LoadSave;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -52,7 +52,7 @@ public class PlayerTalentsCap {
 
         void reset();
 
-        void applyStats(EntityCap.UnitData data, PlayerEntity player);
+        void applyStats(EntityCap.UnitData data, EntityPlayer player);
 
         void addResetPoints(int amount);
 
@@ -63,7 +63,7 @@ public class PlayerTalentsCap {
     public static class EventHandler {
         @SubscribeEvent
         public static void onEntityConstruct(AttachCapabilitiesEvent<Entity> event) {
-            if (event.getObject() instanceof PlayerEntity) {
+            if (event.getObject() instanceof EntityPlayer) {
                 event.addCapability(RESOURCE, new Provider());
             }
         }
@@ -88,14 +88,14 @@ public class PlayerTalentsCap {
         PlayerTalentsData data = new PlayerTalentsData();
 
         @Override
-        public CompoundNBT getNBT() {
-            CompoundNBT nbt = new CompoundNBT();
+        public NBTTagCompound getNBT() {
+            NBTTagCompound nbt = new NBTTagCompound();
             LoadSave.Save(data, nbt, LOC);
             return nbt;
         }
 
         @Override
-        public void setNBT(CompoundNBT nbt) {
+        public void setNBT(NBTTagCompound nbt) {
             this.data = LoadSave.Load(PlayerTalentsData.class, new PlayerTalentsData(), nbt, LOC);
 
             if (data == null) {
@@ -192,8 +192,7 @@ public class PlayerTalentsCap {
         }
 
         public int getAllowedPoints(EntityCap.UnitData data) {
-            return (int) ((float) data.getLevel() * ModConfig.INSTANCE.Server.TALENT_POINTS_PER_LEVEL
-                    .get());
+            return (int) ((float) data.getLevel() * ModConfig.Server.TALENT_POINTS_PER_LEVEL);
         }
 
         @Override
@@ -207,7 +206,7 @@ public class PlayerTalentsCap {
         }
 
         @Override
-        public void applyStats(EntityCap.UnitData data, PlayerEntity player) {
+        public void applyStats(EntityCap.UnitData data, EntityPlayer player) {
             this.data.applyStats(data);
         }
 

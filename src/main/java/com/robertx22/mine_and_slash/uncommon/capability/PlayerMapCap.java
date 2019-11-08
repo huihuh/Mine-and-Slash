@@ -14,17 +14,16 @@ import com.robertx22.mine_and_slash.uncommon.localization.Words;
 import com.robertx22.mine_and_slash.uncommon.utilityclasses.PlayerUtils;
 import com.robertx22.mine_and_slash.uncommon.utilityclasses.WorldUtils;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.Optional;
 
@@ -42,9 +41,9 @@ public class PlayerMapCap {
 
     public interface IPlayerMapData extends ICommonCapability {
 
-        void onTickIfDead(ServerPlayerEntity player);
+        void onTickIfDead(EntityPlayer player);
 
-        float getLootMultiplier(PlayerEntity player);
+        float getLootMultiplier(EntityPlayer player);
 
         float getExpMultiplier();
 
@@ -62,15 +61,15 @@ public class PlayerMapCap {
 
         DimensionType getOriginalDimension();
 
-        void teleportPlayerBack(PlayerEntity player);
+        void teleportPlayerBack(EntityPlayer player);
 
-        void onPlayerDeath(PlayerEntity player);
+        void onPlayerDeath(EntityPlayer player);
 
         boolean isPermaDeath();
 
-        void onMinute(PlayerEntity player);
+        void onMinute(EntityPlayer player);
 
-        void init(BlockPos pos, MapItemData map, DimensionType type, PlayerEntity player);
+        void init(BlockPos pos, MapItemData map, DimensionType type, EntityPlayer player);
 
     }
 
@@ -80,7 +79,7 @@ public class PlayerMapCap {
         @SubscribeEvent
         public static void onEntityConstruct(AttachCapabilitiesEvent<Entity> event) {
 
-            if (event.getObject() instanceof PlayerEntity) {
+            if (event.getObject() instanceof EntityPlayer) {
                 event.addCapability(RESOURCE, new Provider());
             }
         }
@@ -109,13 +108,13 @@ public class PlayerMapCap {
         boolean isDead = false;
 
         @Override
-        public CompoundNBT getNBT() {
+        public NBTTagCompound getNBT() {
 
-            CompoundNBT nbt = new CompoundNBT();
+            NBTTagCompound nbt = new NBTTagCompound();
 
-            nbt.putLong(POS_OBJ, mapDevicePos);
-            nbt.putInt(MIN_PASSED, minutesPassed);
-            nbt.putBoolean("isdead", isDead);
+            nbt.setLong(POS_OBJ, mapDevicePos);
+            nbt.setInteger(MIN_PASSED, minutesPassed);
+            nbt.setBoolean("isdead", isDead);
 
             if (mapdata != null) {
                 Map.Save(nbt, mapdata);
@@ -131,10 +130,10 @@ public class PlayerMapCap {
         }
 
         @Override
-        public void setNBT(CompoundNBT nbt) {
+        public void setNBT(NBTTagCompound nbt) {
 
             this.mapDevicePos = nbt.getLong(POS_OBJ);
-            this.minutesPassed = nbt.getInt(MIN_PASSED);
+            this.minutesPassed = nbt.getInteger(MIN_PASSED);
             this.isDead = nbt.getBoolean("isdead");
 
             mapdata = Map.Load(nbt);
@@ -148,7 +147,7 @@ public class PlayerMapCap {
         }
 
         @Override
-        public void onPlayerDeath(PlayerEntity player) {
+        public void onPlayerDeath(EntityPlayer player) {
 
             this.isDead = true;
 
@@ -174,7 +173,7 @@ public class PlayerMapCap {
                 announceTimeLeft(player);
             }
 
-            if (ModConfig.INSTANCE.Server.DISABLE_DEATH_IN_MAPS.get()) {
+            if (ModConfig.Server.DISABLE_DEATH_IN_MAPS) {
                 player.setHealth(player.getMaxHealth()); // needs to have more hp to actually teleport lol and not die
             }
 
@@ -186,7 +185,7 @@ public class PlayerMapCap {
         }
 
         @Override
-        public void onMinute(PlayerEntity player) {
+        public void onMinute(EntityPlayer player) {
             this.minutesPassed++;
 
             if (this.getMinutesLeft() < 1) {
@@ -203,18 +202,18 @@ public class PlayerMapCap {
 
         @Override
         public void init(BlockPos pos, MapItemData map, DimensionType type,
-                         PlayerEntity player) {
+        		EntityPlayer player) {
 
             this.minutesPassed = 0;
             this.mapDevicePos = pos.toLong();
             this.originalDimension = player.world.getDimension().getType();
             this.mapdata = map.clone();
 
-            MMORPG.syncMapData((ServerPlayerEntity) player);
+            MMORPG.syncMapData((EntityPlayer) player);
 
         }
 
-        private void onMinutePassAnnounce(PlayerEntity player) {
+        private void onMinutePassAnnounce(EntityPlayer player) {
             int minutesLeft = getMinutesLeft();
 
             if (minutesLeft > 0) {
@@ -225,7 +224,7 @@ public class PlayerMapCap {
         }
 
         @Override
-        public void onTickIfDead(ServerPlayerEntity player) {
+        public void onTickIfDead(EntityPlayer player) {
             if (isDead) {
                 this.isDead = false;
                 teleportPlayerBack(player);
@@ -233,7 +232,7 @@ public class PlayerMapCap {
         }
 
         @Override
-        public float getLootMultiplier(PlayerEntity player) {
+        public float getLootMultiplier(EntityPlayer player) {
             if (WorldUtils.isMapWorld(player.world)) {
                 return this.mapdata.getBonusLootMulti();
             } else {
@@ -293,7 +292,7 @@ public class PlayerMapCap {
         }
 
         @Override
-        public void teleportPlayerBack(PlayerEntity player) {
+        public void teleportPlayerBack(EntityPlayer player) {
 
             if (WorldUtils.isMapWorld(player.world)) {
 
@@ -314,9 +313,9 @@ public class PlayerMapCap {
                     }
 
                     try {
-                        Optional<BlockPos> opt = player.getBedPosition();
+                        BlockPos opt = player.getBedLocation();
                         if (opt.isPresent()) {
-                            pos = opt.get();
+                            pos = opt.getX();
                         }
                     } catch (Exception e) {
                         error("Bed location attempt:2 is null");
@@ -334,18 +333,18 @@ public class PlayerMapCap {
                 }
 
                 pos = pos.north(2);
-                PlayerUtils.changeDimension((ServerPlayerEntity) player, this.originalDimension, pos); // TODO conditionIsMet if works
+                PlayerUtils.changeDimension((EntityPlayer) player, this.originalDimension, pos); // TODO conditionIsMet if works
 
             }
         }
 
-        private void announceEnd(PlayerEntity player) {
+        private void announceEnd(EntityPlayer player) {
 
             player.sendMessage(Chats.Ran_Out_Of_Time.locName());
 
         }
 
-        private void announceTimeLeft(PlayerEntity player) {
+        private void announceTimeLeft(EntityPlayer player) {
 
             player.sendMessage(Chats.Remaining_Map_Time_is.locName()
                     .appendText(" " + this.getMinutesLeft() + " ")

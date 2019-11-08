@@ -10,17 +10,16 @@ import com.robertx22.mine_and_slash.uncommon.capability.bases.BaseStorage;
 import com.robertx22.mine_and_slash.uncommon.capability.bases.ICommonCapability;
 import com.robertx22.mine_and_slash.uncommon.datasaving.ProfessionSaving;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 @Mod.EventBusSubscriber
 public class ProfessionsCap {
@@ -40,7 +39,7 @@ public class ProfessionsCap {
 
         int getExpToReachNextLevel(Professions prof);
 
-        void gainExp(int exp, Professions prof, ServerPlayerEntity player);
+        void gainExp(int exp, Professions prof, EntityPlayer player);
 
         float getSucessChanceMultiplier(Professions prof);
 
@@ -54,7 +53,7 @@ public class ProfessionsCap {
         @SubscribeEvent
         public static void onEntityConstruct(AttachCapabilitiesEvent<Entity> event) {
 
-            if (event.getObject() instanceof PlayerEntity) {
+            if (event.getObject() instanceof EntityPlayer) {
                 event.addCapability(RESOURCE, new Provider());
             }
         }
@@ -79,9 +78,9 @@ public class ProfessionsCap {
         ProfessionListData data = new ProfessionListData();
 
         @Override
-        public CompoundNBT getNBT() {
+        public NBTTagCompound getNBT() {
 
-            CompoundNBT nbt = new CompoundNBT();
+            NBTTagCompound nbt = new NBTTagCompound();
 
             ProfessionSaving.Save(nbt, data);
 
@@ -90,7 +89,7 @@ public class ProfessionsCap {
         }
 
         @Override
-        public void setNBT(CompoundNBT nbt) {
+        public void setNBT(NBTTagCompound nbt) {
             this.data = ProfessionSaving.Load(nbt);
         }
 
@@ -125,7 +124,7 @@ public class ProfessionsCap {
         }
 
         @Override
-        public void gainExp(int exp, Professions prof, ServerPlayerEntity player) {
+        public void gainExp(int exp, Professions prof, EntityPlayer player) {
 
             ProfessionData pdata = this.data.getProfessionData(prof);
 

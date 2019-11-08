@@ -1,7 +1,7 @@
 package com.robertx22.mine_and_slash.uncommon.capability.bases;
 
 import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 
@@ -18,7 +18,7 @@ public class BaseStorage<TYPE extends ICommonCapability> implements Capability.I
     public void readNBT(Capability<TYPE> capability, TYPE instance, Direction side,
                         INBT nbt) {
 
-        instance.setNBT((CompoundNBT) nbt);
+        instance.setNBT((NBTTagCompound) nbt);
 
     }
 

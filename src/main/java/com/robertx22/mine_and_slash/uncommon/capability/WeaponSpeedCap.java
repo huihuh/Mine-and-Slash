@@ -8,17 +8,17 @@ import com.robertx22.mine_and_slash.uncommon.capability.bases.ICommonCapability;
 import com.robertx22.mine_and_slash.uncommon.datasaving.Gear;
 import com.robertx22.mine_and_slash.uncommon.datasaving.Load;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 @Mod.EventBusSubscriber
 public class WeaponSpeedCap {
@@ -29,7 +29,7 @@ public class WeaponSpeedCap {
     public static final Capability<IWeaponSpeedCap> Data = null;
 
     public interface IWeaponSpeedCap extends ICommonCapability {
-        void onAttack(PlayerEntity en);
+        void onAttack(EntityPlayer en);
 
         boolean canAttack();
 
@@ -49,7 +49,7 @@ public class WeaponSpeedCap {
         @SubscribeEvent
         public static void onEntityConstruct(AttachCapabilitiesEvent<Entity> event) {
 
-            if (event.getObject() instanceof PlayerEntity) {
+            if (event.getObject() instanceof EntityPlayer) {
                 event.addCapability(RESOURCE, new Provider());
             }
         }
@@ -74,23 +74,23 @@ public class WeaponSpeedCap {
         int cooldownTicks = 0;
 
         @Override
-        public CompoundNBT getNBT() {
+        public NBTTagCompound getNBT() {
 
-            CompoundNBT nbt = new CompoundNBT();
+        	NBTTagCompound nbt = new NBTTagCompound();
 
-            nbt.putInt("ticks", cooldownTicks);
+            nbt.setInteger("ticks", cooldownTicks);
 
             return nbt;
 
         }
 
         @Override
-        public void setNBT(CompoundNBT nbt) {
-            this.cooldownTicks = nbt.getInt("ticks");
+        public void setNBT(NBTTagCompound nbt) {
+            this.cooldownTicks = nbt.getInteger("ticks");
         }
 
         @Override
-        public void onAttack(PlayerEntity en) {
+        public void onAttack(EntityPlayer en) {
             ItemStack stack = en.getHeldItemMainhand();
             GearItemData gear = Gear.Load(stack);
             if (gear != null) {

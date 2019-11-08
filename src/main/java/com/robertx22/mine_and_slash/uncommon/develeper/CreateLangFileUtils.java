@@ -7,9 +7,9 @@ import com.robertx22.mine_and_slash.uncommon.interfaces.IAutoLocMultiLore;
 import com.robertx22.mine_and_slash.uncommon.interfaces.IAutoLocName;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
-import net.minecraft.potion.Effect;
+import net.minecraft.potion.Potion;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -54,7 +54,7 @@ public class CreateLangFileUtils {
                 list.add((T) item);
             }
         }
-        for (Effect item : ForgeRegistries.POTIONS) {
+        for (Potion item : ForgeRegistries.POTIONS) {
             if (matches(item.getRegistryName()) && theclass.isAssignableFrom(item.getClass())) {
                 list.add((T) item);
             }

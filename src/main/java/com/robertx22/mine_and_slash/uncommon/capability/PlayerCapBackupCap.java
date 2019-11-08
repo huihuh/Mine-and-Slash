@@ -6,15 +6,15 @@ import com.robertx22.mine_and_slash.uncommon.capability.bases.BaseProvider;
 import com.robertx22.mine_and_slash.uncommon.capability.bases.BaseStorage;
 import com.robertx22.mine_and_slash.uncommon.capability.bases.ICommonCapability;
 import com.robertx22.mine_and_slash.uncommon.datasaving.PlayersCapBackupSaving;
-import net.minecraft.nbt.CompoundNBT;
+
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 @Mod.EventBusSubscriber
 public class PlayerCapBackupCap {
@@ -60,8 +60,8 @@ public class PlayerCapBackupCap {
         PlayersCapBackup backup = new PlayersCapBackup();
 
         @Override
-        public CompoundNBT getNBT() {
-            CompoundNBT nbt = new CompoundNBT();
+        public NBTTagCompound getNBT() {
+            NBTTagCompound nbt = new NBTTagCompound();
 
             if (backup != null) {
                 PlayersCapBackupSaving.Save(nbt, backup);
@@ -72,7 +72,7 @@ public class PlayerCapBackupCap {
         }
 
         @Override
-        public void setNBT(CompoundNBT value) {
+        public void setNBT(NBTTagCompound value) {
 
             backup = PlayersCapBackupSaving.Load(value);
 

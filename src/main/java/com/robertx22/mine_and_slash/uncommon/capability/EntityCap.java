@@ -163,7 +163,7 @@ public class EntityCap {
 
         void HandleCloneEvent(UnitData old);
 
-        void recalculateStats(EntityLiving entity);
+        void recalculateStats(EntityPlayer player);
 
         void forceRecalculateStats(EntityLiving entity);
 
@@ -460,8 +460,7 @@ public class EntityCap {
 
         private boolean shouldDropLoot(EntityLiving entity) {
 
-            if (entity.getMaxHealth() * ModConfig.Server.STOP_DROPS_IF_NON_PLAYER_DOES_DMG_PERCENT
-                    .get() >= this.dmgByNonPlayers) {
+            if (entity.getMaxHealth() * ModConfig.Server.STOP_DROPS_IF_NON_PLAYER_DOES_DMG_PERCENT >= this.dmgByNonPlayers) {
                 return true;
             }
 
@@ -471,7 +470,7 @@ public class EntityCap {
         @Override
         public int PostGiveExpEvent(EntityLiving killed, EntityPlayer player, int i) {
 
-            i *= ModConfig.Server.EXPERIENCE_MULTIPLIER.get();
+            i *= ModConfig.Server.EXPERIENCE_MULTIPLIER;
 
             i *= (double) this.getUnit().getStat(BonusExp.GUID).Value / 100 + 1;
 
@@ -487,7 +486,7 @@ public class EntityCap {
 
             if (exp > this.GetExpRequiredForLevelUp()) {
 
-                if (ModConfig.Server.LEVEL_UPS_COST_TOKEN.get() == false) {
+                if (ModConfig.Server.LEVEL_UPS_COST_TOKEN == false) {
 
                     if (this.CheckIfCanLevelUp() && this.CheckLevelCap()) {
                         this.LevelUp(player);
@@ -517,7 +516,7 @@ public class EntityCap {
 
         @Override
         public boolean CheckLevelCap() {
-            return getLevel() + 1 <= ModConfig.Server.MAXIMUM_PLAYER_LEVEL.get();
+            return getLevel() + 1 <= ModConfig.Server.MAXIMUM_PLAYER_LEVEL;
         }
 
         @Override
@@ -536,14 +535,14 @@ public class EntityCap {
                 player.sendMessage(new StringTextComponent(TextFormatting.YELLOW + "" + TextFormatting.BOLD)
                         .appendSibling(Chats.You_have_leveled_up.locName())
                         .appendText("!"));
-                CriteriaRegisters.PLAYER_LEVEL_TRIGGER.trigger((ServerEntityPlayer) player, this);
+                CriteriaRegisters.PLAYER_LEVEL_TRIGGER.trigger((EntityPlayer) player, this);
                 onLvlPostStatPickMsg(player);
                 onLvlPostTalentsMsg(player);
 
                 try {
                     Load.playersCapBackup(MapManager.getWorld(DimensionType.OVERWORLD))
                             .getBackup()
-                            .backup((ServerEntityPlayer) player, this);
+                            .backup((EntityPlayer) player, this);
                 } catch (Exception e) {
                     //  e.printStackTrace();
                 }
@@ -565,15 +564,15 @@ public class EntityCap {
             }
         }
 
-        public void onLvlPostStatPickMsg(EntityLiving en) {
+        public void onLvlPostStatPickMsg(EntityPlayer player) {
 
-            int points = Load.statPoints((EntityPlayer) en).getAvailablePoints(this);
+            int points = Load.statPoints((EntityPlayer) player).getAvailablePoints(this);
 
             if (points > 0) {
                 ITextComponent msg = new StringTextComponent(TextFormatting.GREEN + "You have " + points + " Unspent Stat points." + TextFormatting.ITALIC + " Click to Open Gui");
                 msg.setStyle(msg.getStyle()
                         .setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/" + OpenPickStatsGui.COMMAND)));
-                en.sendMessage(msg);
+                player.sendMessage(msg);
             }
         }
 
@@ -585,16 +584,15 @@ public class EntityCap {
         }
 
         @Override
-        public void setLevel(int lvl, EntityLiving entity) {
+        public void setLevel(int lvl, EntityPlayer player) {
 
-            level = MathHelper.clamp(lvl, 1, ModConfig.Server.MAXIMUM_PLAYER_LEVEL
-                    .get());
+            level = MathHelper.clamp(lvl, 1, ModConfig.Server.MAXIMUM_PLAYER_LEVEL);
 
             this.equipsChanged = true;
             this.shouldSync = true;
 
-            if (entity instanceof ServerEntityPlayer) {
-                CriteriaRegisters.PLAYER_LEVEL_TRIGGER.trigger((ServerEntityPlayer) entity, this);
+            if (player instanceof EntityPlayer) {
+                CriteriaRegisters.PLAYER_LEVEL_TRIGGER.trigger((EntityPlayer) player, this);
             }
         }
 
@@ -650,7 +648,7 @@ public class EntityCap {
         @Override
         public void syncToClient(EntityPlayer player) {
             if (unit != null) {
-                ServerEntityPlayer mp = (ServerEntityPlayer) player;
+                EntityPlayer mp = (EntityPlayer) player;
                 SyncCapabilityToClient packet = new SyncCapabilityToClient(mp, CapTypes.ENTITY_DATA);
                 MMORPG.sendToClient(packet, mp);
             }

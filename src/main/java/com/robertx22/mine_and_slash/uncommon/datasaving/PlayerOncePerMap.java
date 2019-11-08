@@ -2,13 +2,13 @@ package com.robertx22.mine_and_slash.uncommon.datasaving;
 
 import com.robertx22.mine_and_slash.saveclasses.PlayerOncePerMapData;
 import com.robertx22.mine_and_slash.uncommon.datasaving.base.LoadSave;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class PlayerOncePerMap {
 
     private static final String LOC = "mmorpg:PLAYER_ONCE_PER_MAP_DATA";
 
-    public static PlayerOncePerMapData Load(CompoundNBT nbt) {
+    public static PlayerOncePerMapData Load(NBTTagCompound nbt) {
 
         if (nbt == null) {
             return null;
@@ -18,7 +18,7 @@ public class PlayerOncePerMap {
 
     }
 
-    public static void Save(CompoundNBT nbt, PlayerOncePerMapData gear) {
+    public static void Save(NBTTagCompound nbt, PlayerOncePerMapData gear) {
 
         if (nbt == null) {
             return;

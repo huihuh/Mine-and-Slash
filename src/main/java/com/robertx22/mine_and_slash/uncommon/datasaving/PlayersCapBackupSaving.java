@@ -2,13 +2,13 @@ package com.robertx22.mine_and_slash.uncommon.datasaving;
 
 import com.robertx22.mine_and_slash.saveclasses.PlayersCapBackup;
 import com.robertx22.mine_and_slash.uncommon.datasaving.base.LoadSave;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class PlayersCapBackupSaving {
 
     private static final String LOC = "mmorpg:players_cap_backup";
 
-    public static PlayersCapBackup Load(CompoundNBT nbt) {
+    public static PlayersCapBackup Load(NBTTagCompound nbt) {
 
         if (nbt == null) {
             return null;
@@ -18,10 +18,10 @@ public class PlayersCapBackupSaving {
 
     }
 
-    public static void Save(CompoundNBT nbt, PlayersCapBackup gear) {
+    public static void Save(NBTTagCompound nbt, PlayersCapBackup gear) {
 
         if (nbt == null) {
-            nbt = new CompoundNBT();
+            nbt = new NBTTagCompound();
         }
 
         if (gear != null) {

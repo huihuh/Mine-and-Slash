@@ -2,6 +2,7 @@ package com.robertx22.mine_and_slash.uncommon.datasaving;
 
 import com.robertx22.mine_and_slash.uncommon.capability.*;
 import com.robertx22.mine_and_slash.uncommon.capability.EntityCap.UnitData;
+import com.robertx22.mine_and_slash.uncommon.capability.MapCap.IMapData;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
@@ -11,94 +12,19 @@ import javax.annotation.Nonnull;
 
 public class Load {
 
-    public static boolean hasUnit(
-            ICapabilityProvider provider) { // tterag said this is correct
-        if (provider != null) {
-            return provider.getCapability(EntityCap.Data).isPresent();
-        }
-        return false;
-    }
-
-    public static PlayerStatsPointsCap.IPlayerStatPointsData statPoints(
-    		EntityPlayer provider) {
-
-        if (provider != null) {
-
-            return provider.getCapability(PlayerStatsPointsCap.Data)
-                    .orElse(new PlayerStatsPointsCap.DefaultImpl());
-
-        }
-        return null;
-    }
-
-    @Nonnull
-    public static PlayerTalentsCap.IPlayerTalentsData talents(EntityPlayer provider) {
-
-        return provider.getCapability(PlayerTalentsCap.Data)
-                .orElse(new PlayerTalentsCap.DefaultImpl());
-    }
-
-    public static WeaponSpeedCap.IWeaponSpeedCap weaponSpeed(EntityPlayer provider) {
-
-        if (provider != null) {
-
-            return provider.getCapability(WeaponSpeedCap.Data)
-                    .orElse(new WeaponSpeedCap.DefaultImpl());
-
-        }
-        return null;
-    }
-
-    public static ProfessionsCap.IProfessionsData professions(EntityPlayer provider) {
-
-        if (provider != null) {
-
-            return provider.getCapability(ProfessionsCap.Data)
-                    .orElse(new ProfessionsCap.DefaultImpl());
-
-        }
-        return null;
-    }
-
-    public static MapCap.IMapData mapData(ICapabilityProvider provider) {
-
-        if (provider != null) {
-
-            return provider.getCapability(MapCap.Data).orElse(new MapCap.DefaultImpl());
-
-        }
-        return null;
-    }
-
-    public static PlayerCapBackupCap.IPlayerCapBackupData playersCapBackup(World world) {
-
-        if (world != null) {
-
-            return world.getCapability(PlayerCapBackupCap.Data)
-                    .orElse(new PlayerCapBackupCap.DefaultImpl());
-
-        }
-        return null;
-    }
-
     public static UnitData Unit(ICapabilityProvider provider) {
-
-        if (provider != null) {
-
-            return provider.getCapability(EntityCap.Data)
-                    .orElse(new EntityCap.DefaultImpl());
-
-        }
-        return null;
+	if (provider != null) {
+	    return provider.getCapability(EntityCap.Data, null);
+	}
+	return null;
     }
 
-    public static PlayerMapCap.IPlayerMapData playerMapData(EntityPlayer provider) {
+    public static IMapData World(ICapabilityProvider provider) {
 
-        if (provider != null) {
-            return provider.getCapability(PlayerMapCap.Data)
-                    .orElse(new PlayerMapCap.DefaultImpl());
-        }
-        return null;
+	if (provider != null) {
+	    return provider.getCapability(MapCap.Data, null);
+
+	}
+	return null;
     }
-
 }

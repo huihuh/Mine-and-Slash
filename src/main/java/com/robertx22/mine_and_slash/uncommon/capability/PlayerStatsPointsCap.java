@@ -10,14 +10,14 @@ import com.robertx22.mine_and_slash.uncommon.capability.bases.BaseStorage;
 import com.robertx22.mine_and_slash.uncommon.capability.bases.ICommonCapability;
 import com.robertx22.mine_and_slash.uncommon.datasaving.base.LoadSave;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.Optional;
 
@@ -34,7 +34,7 @@ public class PlayerStatsPointsCap {
 
         public SingleStatPointData getStatData(LvlPointStat stat);
 
-        public void addPoint(PlayerEntity player, LvlPointStat stat,
+        public void addPoint(EntityPlayer player, LvlPointStat stat,
                              EntityCap.UnitData data);
 
         int getAvailablePoints(EntityCap.UnitData data);
@@ -53,7 +53,7 @@ public class PlayerStatsPointsCap {
         @SubscribeEvent
         public static void onEntityConstruct(AttachCapabilitiesEvent<Entity> event) {
 
-            if (event.getObject() instanceof PlayerEntity) {
+            if (event.getObject() instanceof EntityPlayer) {
                 event.addCapability(RESOURCE, new Provider());
             }
         }
@@ -78,14 +78,14 @@ public class PlayerStatsPointsCap {
         PlayerStatPointsData data = new PlayerStatPointsData();
 
         @Override
-        public CompoundNBT getNBT() {
-            CompoundNBT nbt = new CompoundNBT();
+        public NBTTagCompound getNBT() {
+            NBTTagCompound nbt = new NBTTagCompound();
             LoadSave.Save(data, nbt, LOC);
             return nbt;
         }
 
         @Override
-        public void setNBT(CompoundNBT nbt) {
+        public void setNBT(NBTTagCompound nbt) {
             this.data = LoadSave.Load(PlayerStatPointsData.class, new PlayerStatPointsData(), nbt, LOC);
         }
 
@@ -98,7 +98,7 @@ public class PlayerStatsPointsCap {
         }
 
         public int getPointsForLevel(int lvl) {
-            return (int) (lvl * ModConfig.INSTANCE.Server.STAT_POINTS_PER_LEVEL.get());
+            return (int) (lvl * ModConfig.Server.STAT_POINTS_PER_LEVEL);
         }
 
         @Override
@@ -132,7 +132,7 @@ public class PlayerStatsPointsCap {
         }
 
         @Override
-        public void addPoint(PlayerEntity player, LvlPointStat stat,
+        public void addPoint(EntityPlayer player, LvlPointStat stat,
                              EntityCap.UnitData data) {
             if (this.hasAvailablePoints(data)) {
                 getStatData(stat).points++;

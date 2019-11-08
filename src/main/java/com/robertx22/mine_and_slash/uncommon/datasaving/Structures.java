@@ -2,13 +2,14 @@ package com.robertx22.mine_and_slash.uncommon.datasaving;
 
 import com.robertx22.mine_and_slash.saveclasses.StructuresData;
 import com.robertx22.mine_and_slash.uncommon.datasaving.base.LoadSave;
-import net.minecraft.nbt.CompoundNBT;
+
+import net.minecraft.nbt.NBTTagCompound;
 
 public class Structures {
 
     private static final String LOC = "STRUCTURES_DATA";
 
-    public static StructuresData Load(CompoundNBT nbt) {
+    public static StructuresData Load(NBTTagCompound nbt) {
 
         if (nbt == null) {
             return null;
@@ -18,10 +19,10 @@ public class Structures {
 
     }
 
-    public static void Save(CompoundNBT nbt, StructuresData gear) {
+    public static void Save(NBTTagCompound nbt, StructuresData gear) {
 
         if (nbt == null) {
-            nbt = new CompoundNBT();
+            nbt = new NBTTagCompound();
         }
 
         if (gear != null) {

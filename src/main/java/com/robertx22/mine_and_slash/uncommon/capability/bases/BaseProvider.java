@@ -1,11 +1,12 @@
 package com.robertx22.mine_and_slash.uncommon.capability.bases;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 
 import javax.annotation.Nonnull;
 
-public abstract class BaseProvider<TYPE> implements ICapabilitySerializable<CompoundNBT> {
+public abstract class BaseProvider<TYPE> implements ICapabilitySerializable<NBTTagCompound> {
 
     public abstract TYPE defaultImpl();
 
@@ -15,14 +16,14 @@ public abstract class BaseProvider<TYPE> implements ICapabilitySerializable<Comp
     private final LazyOptional<TYPE> cap = LazyOptional.of(() -> impl);
 
     @Override
-    public CompoundNBT serializeNBT() {
-        return (CompoundNBT) dataInstance().getStorage()
+    public NBTTagCompound serializeNBT() {
+        return (NBTTagCompound) dataInstance().getStorage()
                 .writeNBT(dataInstance(), impl, null);
 
     }
 
     @Override
-    public void deserializeNBT(CompoundNBT nbt) {
+    public void deserializeNBT(NBTTagCompound nbt) {
         dataInstance().getStorage().readNBT(dataInstance(), impl, null, nbt);
 
     }

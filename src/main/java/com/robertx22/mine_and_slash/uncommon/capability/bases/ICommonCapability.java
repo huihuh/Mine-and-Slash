@@ -1,10 +1,10 @@
 package com.robertx22.mine_and_slash.uncommon.capability.bases;
 
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.NBTTagCompound;
 
 public interface ICommonCapability {
 
-    CompoundNBT getNBT();
+    NBTTagCompound getNBT();
 
-    void setNBT(CompoundNBT value);
+    void setNBT(NBTTagCompound value);
 }
