@@ -23,7 +23,7 @@ public interface IAutoLocName extends IBaseAutoLoc {
 
     public String locNameForLangFile();
 
-    public default ITextComponent locName() {
+    public default String locName() {
         return CLOC.blank(formatString(locNameLangFileGUID()));
     }
 

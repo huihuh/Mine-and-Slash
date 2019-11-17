@@ -3,8 +3,8 @@ package com.robertx22.mine_and_slash.uncommon.utilityclasses;
 import com.robertx22.mine_and_slash.config.dimension_configs.DimensionConfig;
 import com.robertx22.mine_and_slash.db_lists.registry.SlashRegistry;
 import com.robertx22.mine_and_slash.uncommon.datasaving.Load;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.EntityPredicates;
+
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -18,7 +18,7 @@ public class LevelUtils {
         int lvl = 1;
 
         if (dimConfig.SCALE_MOB_LEVEL_TO_NEAREST_PLAYER) {
-            PlayerEntity player = world.getClosestPlayer(pos.getX(), pos.getY(), pos.getZ(), (double) 3000, EntityPredicates.NOT_SPECTATING);
+        	EntityPlayer player = world.getClosestPlayer(pos.getX(), pos.getY(), pos.getZ(), (double) 3000, PredicatesEntity.NOT_SPECTATING);
 
             if (player != null) {
                 lvl = Load.Unit(player).getLevel();

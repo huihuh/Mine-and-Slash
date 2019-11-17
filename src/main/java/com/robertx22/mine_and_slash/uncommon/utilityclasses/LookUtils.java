@@ -1,9 +1,8 @@
 package com.robertx22.mine_and_slash.uncommon.utilityclasses;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -20,7 +19,7 @@ public class LookUtils {
         RayTraceResult pos = raycast(e, finalDistance);
 
         Vec3d positionVector = e.getPositionVector();
-        if (e instanceof PlayerEntity)
+        if (e instanceof EntityPlayer)
             positionVector = positionVector.add(0, e.getEyeHeight(), 0);
 
         if (pos != null)
@@ -31,7 +30,7 @@ public class LookUtils {
 
         Entity lookedEntity = null;
         List<Entity> entitiesInBoundingBox = e.getEntityWorld()
-                .getEntitiesWithinAABBExcludingEntity(e, e.getBoundingBox()
+                .getEntitiesWithinAABBExcludingEntity(e, e.getEntityBoundingBox()
                         .grow(lookVector.x * finalDistance, lookVector.y * finalDistance, lookVector.z * finalDistance)
                         .expand(1F, 1F, 1F));
         double minDistance = distance;
@@ -39,7 +38,7 @@ public class LookUtils {
         for (Entity entity : entitiesInBoundingBox) {
             if (entity.canBeCollidedWith()) {
                 float collisionBorderSize = entity.getCollisionBorderSize();
-                AxisAlignedBB hitbox = entity.getBoundingBox()
+                AxisAlignedBB hitbox = entity.getEntityBoundingBox()
                         .expand(collisionBorderSize, collisionBorderSize, collisionBorderSize);
                 Optional<Vec3d> interceptPosition = hitbox.rayTrace(positionVector, reachVector);
                 Vec3d interceptVec = interceptPosition.orElse(null);

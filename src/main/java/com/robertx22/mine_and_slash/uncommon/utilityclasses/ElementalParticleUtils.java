@@ -14,7 +14,7 @@ public class ElementalParticleUtils {
         String name = new NovaParticleGen().Name();
 
         ParticleUtils.spawnParticleGenerator(entity, name, entity.posX, entity.posY + entity
-                .getHeight() / 2, entity.posZ, 1, 1, 1, radius, amount, icolor);
+                .getEyeHeight() / 2, entity.posZ, 1, 1, 1, radius, amount, icolor);
     }
 
     public static void SpawnAoeParticle(IColor icolor, Entity entity, double radius,

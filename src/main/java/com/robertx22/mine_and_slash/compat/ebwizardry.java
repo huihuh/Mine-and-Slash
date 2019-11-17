@@ -8,7 +8,9 @@ import org.apache.logging.log4j.Logger;
 import com.google.common.collect.ImmutableList;
 import com.robertx22.mine_and_slash.api.MineAndSlashAPI;
 import com.robertx22.mine_and_slash.config.compatible_items.ConfigItem;
-import com.robertx22.mine_and_slash.database.gearitemslots.Necklace;
+import com.robertx22.mine_and_slash.database.gearitemslots.baubles.Necklace;
+import com.robertx22.mine_and_slash.database.gearitemslots.baubles.Ring;
+import com.robertx22.mine_and_slash.database.gearitemslots.baubles.Charm;
 import com.robertx22.mine_and_slash.database.gearitemslots.cloth.ClothBoots;
 import com.robertx22.mine_and_slash.database.gearitemslots.cloth.ClothChest;
 import com.robertx22.mine_and_slash.database.gearitemslots.cloth.ClothHelmet;
@@ -53,7 +55,7 @@ public class ebwizardry {
 			"wizard_boots_lightning", "wizard_boots_necromancy", "wizard_boots_earth", "wizard_boots_sorcery",
 			"wizard_boots_healing");
 
-	private static final List<String> Ring = ImmutableList.of("ring_arcane_frost", "ring_battlemage",
+	private static final List<String> MyRing = ImmutableList.of("ring_arcane_frost", "ring_battlemage",
 			"ring_blockwrangler", "ring_combustion", "ring_condensing", "ring_conjurer", "ring_defender",
 			"ring_disintegration", "ring_earth_biome", "ring_earth_melee", "ring_extraction", "ring_fire_biome",
 			"ring_fire_melee", "ring_full_moon", "ring_hammer", "ring_ice_biome", "ring_ice_melee", "ring_interdiction",
@@ -67,7 +69,7 @@ public class ebwizardry {
 			"amulet_potential", "amulet_recovery", "amulet_resurrection", "amulet_transience", "amulet_warding",
 			"amulet_wisdom", "amulet_wither_immunity");
 
-	private static final List<String> Charm = ImmutableList.of("charm_haggler", "charm_abseiling",
+	private static final List<String> MyCharm = ImmutableList.of("charm_haggler", "charm_abseiling",
 			"charm_experience_tome", "charm_feeding", "charm_flight", "charm_growth", "charm_lava_walking",
 			"charm_light", "charm_minion_health", "charm_minion_variants", "charm_silk_touch", "charm_stop_time",
 			"charm_storm");
@@ -77,56 +79,56 @@ public class ebwizardry {
 		String modID = "ebwizardry:";
 
 		for (String b : BASIC) {
-			MineAndSlashAPI.addCompatibleItem(modID + b, new ConfigItem().setType(new Staff()).setMaxLevel(10));
+			MineAndSlashAPI.addCompatibleItem(modID + b, new ConfigItem().setType(Staff.INSTANCE).setMaxLevel(10));
 		}
 		for (String p : APPRENTICE) {
-			MineAndSlashAPI.addCompatibleItem(modID + p, new ConfigItem().setType(new Staff()).setMinLevel(30));
+			MineAndSlashAPI.addCompatibleItem(modID + p, new ConfigItem().setType(Staff.INSTANCE).setMinLevel(30));
 		}
 		for (String a : ADVANCED) {
-			MineAndSlashAPI.addCompatibleItem(modID + a, new ConfigItem().setType(new Staff()).setMinLevel(50));
+			MineAndSlashAPI.addCompatibleItem(modID + a, new ConfigItem().setType(Staff.INSTANCE).setMinLevel(50));
 		}
 		for (String m : MASTER) {
-			MineAndSlashAPI.addCompatibleItem(modID + m, new ConfigItem().setType(new Staff()).setMinLevel(70));
+			MineAndSlashAPI.addCompatibleItem(modID + m, new ConfigItem().setType(Staff.INSTANCE).setMinLevel(70));
 		}
 		LOGGER.debug("Registered Staffs");
 		for (String s : Helmet) {
-			MineAndSlashAPI.addCompatibleItem(modID + "wizard_hat", new ConfigItem().setType(new ClothHelmet())
+			MineAndSlashAPI.addCompatibleItem(modID + "wizard_hat", new ConfigItem().setType(ClothHelmet.INSTANCE)
 					.setMaxRarity(2).setAlwaysNormal().setMaxLevel(10));
-			MineAndSlashAPI.addCompatibleItem(modID + s, new ConfigItem().setType(new ClothHelmet()).setMaxRarity(2)
+			MineAndSlashAPI.addCompatibleItem(modID + s, new ConfigItem().setType(ClothHelmet.INSTANCE).setMaxRarity(2)
 					.setAlwaysNormal().setMinLevel(30));
 			LOGGER.debug("Registered Helmet");
 		}
 		for (String s : Chestplate) {
-			MineAndSlashAPI.addCompatibleItem(modID + "wizard_robe", new ConfigItem().setType(new ClothChest())
+			MineAndSlashAPI.addCompatibleItem(modID + "wizard_robe", new ConfigItem().setType(ClothChest.INSTANCE)
 					.setMaxRarity(2).setAlwaysNormal().setMaxLevel(10));
-			MineAndSlashAPI.addCompatibleItem(modID + s, new ConfigItem().setType(new ClothChest()).setMaxRarity(2)
+			MineAndSlashAPI.addCompatibleItem(modID + s, new ConfigItem().setType(ClothChest.INSTANCE).setMaxRarity(2)
 					.setAlwaysNormal().setMinLevel(30));
 			LOGGER.debug("Registered Chestplate");
 		}
 		for (String s : Leggings) {
-			MineAndSlashAPI.addCompatibleItem(modID + "wizard_leggings", new ConfigItem().setType(new ClothPants())
+			MineAndSlashAPI.addCompatibleItem(modID + "wizard_leggings", new ConfigItem().setType(ClothPants.INSTANCE)
 					.setMaxRarity(2).setAlwaysNormal().setMaxLevel(10));
-			MineAndSlashAPI.addCompatibleItem(modID + s, new ConfigItem().setType(new ClothPants()).setMaxRarity(2)
+			MineAndSlashAPI.addCompatibleItem(modID + s, new ConfigItem().setType(ClothPants.INSTANCE).setMaxRarity(2)
 					.setAlwaysNormal().setMinLevel(30));
 			LOGGER.debug("Registered Leggings");
 		}
 		for (String s : Boots) {
-			MineAndSlashAPI.addCompatibleItem(modID + "wizard_boots", new ConfigItem().setType(new ClothBoots())
+			MineAndSlashAPI.addCompatibleItem(modID + "wizard_boots", new ConfigItem().setType(ClothBoots.INSTANCE)
 					.setMaxRarity(2).setAlwaysNormal().setMaxLevel(10));
-			MineAndSlashAPI.addCompatibleItem(modID + s, new ConfigItem().setType(new ClothBoots()).setMaxRarity(2)
+			MineAndSlashAPI.addCompatibleItem(modID + s, new ConfigItem().setType(ClothBoots.INSTANCE).setMaxRarity(2)
 					.setAlwaysNormal().setMinLevel(30));
 			LOGGER.debug("Registered Boots");
 		}
-		for (String s : Ring) {
-			MineAndSlashAPI.addCompatibleItem(modID + s, new ConfigItem().setType(new Ring()));
+		for (String s : MyRing) {
+			MineAndSlashAPI.addCompatibleItem(modID + s, new ConfigItem().setType(Ring.INSTANCE));
 			LOGGER.debug("Registered Rings");
 		}
 		for (String s : Amulet) {
-			MineAndSlashAPI.addCompatibleItem(modID + s, new ConfigItem().setType(new Necklace()));
+			MineAndSlashAPI.addCompatibleItem(modID + s, new ConfigItem().setType(Necklace.INSTANCE));
 			LOGGER.debug("Registered Amulets");
 		}
-		for (String s : Charm) {
-			MineAndSlashAPI.addCompatibleItem(modID + s, new ConfigItem().setType(new Charm()));
+		for (String s : MyCharm) {
+			MineAndSlashAPI.addCompatibleItem(modID + s, new ConfigItem().setType(Charm.INSTANCE));
 			LOGGER.debug("Registered Charms");
 		}
 	}

@@ -29,6 +29,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -66,7 +67,7 @@ public class HealthBarRenderer {
 			Entity focused = HealthBarUtils.getEntityLookedAt(mc.player);
 			if (focused != null && focused.hasCapability(EntityCap.Data, null) && focused.isEntityAlive())
 				try {
-					renderHealthBar((EntityLivingBase) focused, partialTicks, cameraEntity);
+					renderHealthBar((EntityLiving) focused, partialTicks, cameraEntity);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -80,11 +81,11 @@ public class HealthBarRenderer {
 								renderingVector.getZ())
 						&& (entity.ignoreFrustumCheck || frustum.isBoundingBoxInFrustum(entity.getEntityBoundingBox()))
 						&& entity.isEntityAlive() && entity.getRecursivePassengers().isEmpty())
-					renderHealthBar((EntityLivingBase) entity, partialTicks, cameraEntity);
+					renderHealthBar((EntityLiving) entity, partialTicks, cameraEntity);
 		}
 	}
 
-	public void renderHealthBar(EntityLivingBase passedEntity, float partialTicks, Entity viewPoint) {
+	public void renderHealthBar(EntityLiving passedEntity, float partialTicks, Entity viewPoint) {
 		Stack<EntityLivingBase> ridingStack = new Stack();
 
 		EntityLivingBase entity = passedEntity;

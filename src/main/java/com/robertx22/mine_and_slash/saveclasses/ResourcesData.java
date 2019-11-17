@@ -9,6 +9,7 @@ import com.robertx22.mine_and_slash.uncommon.utilityclasses.HealthUtils;
 import info.loenwind.autosave.annotations.Storable;
 import info.loenwind.autosave.annotations.Store;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.MathHelper;
 
 @Storable
@@ -23,10 +24,10 @@ public class ResourcesData {
         public BaseSpell spell;
 
         public UnitData sourceData;
-        public EntityLiving source;
+        public EntityLivingBase source;
 
         public UnitData targetData;
-        public EntityLiving target;
+        public EntityLivingBase target;
 
         public Type type;
         public float amount;
@@ -34,7 +35,7 @@ public class ResourcesData {
 
         public boolean statsCalculated = false;
 
-        public Context(UnitData data, EntityLiving entity, Type type, float amount,
+        public Context(UnitData data, EntityLivingBase entity, Type type, float amount,
                        Use use, BaseSpell spell) {
             this.targetData = data;
             this.target = entity;
@@ -47,7 +48,7 @@ public class ResourcesData {
             calculateStats();
         }
 
-        public Context(UnitData data, EntityLiving entity, Type type, float amount,
+        public Context(UnitData data, EntityLivingBase entity, Type type, float amount,
                        Use use) {
             this.targetData = data;
             this.target = entity;
@@ -105,7 +106,7 @@ public class ResourcesData {
         return magicShield;
     }
 
-    public float getHealth(UnitData data, EntityLiving entity) {
+    public float getHealth(UnitData data, EntityLivingBase entity) {
         return data.getUnit().health().CurrentValue(entity, data.getUnit());
     }
 

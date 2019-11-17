@@ -1,18 +1,18 @@
 package com.robertx22.mine_and_slash.uncommon.utilityclasses;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.INPC;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.INpc;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.passive.IAnimals;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
-import net.minecraft.item.Items;
+import net.minecraft.init.Items;
 
 public class EntityTypeUtils {
 
     public enum EntityType {
-        MOB(Items.ZOMBIE_SPAWN_EGG),
+        MOB(Items.SPAWN_EGG),
         PLAYER(null),
         ANIMAL(Items.WHEAT),
         NPC(Items.EMERALD),
@@ -30,7 +30,7 @@ public class EntityTypeUtils {
 
     }
 
-    public static EntityType getType(LivingEntity entity) {
+    public static EntityType getType(Entity entity) {
 
         if (isMob(entity)) {
             return EntityType.MOB;
@@ -38,7 +38,7 @@ public class EntityTypeUtils {
             return EntityType.ANIMAL;
         } else if (isNPC(entity)) {
             return EntityType.NPC;
-        } else if (entity instanceof PlayerEntity) {
+        } else if (entity instanceof EntityPlayer) {
             return EntityType.PLAYER;
         } else {
             return EntityType.OTHER;
@@ -54,7 +54,7 @@ public class EntityTypeUtils {
 
     public static boolean isAnimal(Entity en) {
 
-        return en instanceof AnimalEntity;
+        return en instanceof IAnimals;
 
     }
 
@@ -66,7 +66,7 @@ public class EntityTypeUtils {
      */
     public static boolean isNPC(Entity en) {
 
-        return en instanceof INPC;
+        return en instanceof INpc;
 
     }
 }

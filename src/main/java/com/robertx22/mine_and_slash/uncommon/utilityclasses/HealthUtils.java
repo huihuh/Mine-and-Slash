@@ -5,10 +5,11 @@ import com.robertx22.mine_and_slash.saveclasses.Unit;
 import com.robertx22.mine_and_slash.uncommon.capability.EntityCap.UnitData;
 
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 
 public class HealthUtils {
 
-    public static float DamageToMinecraftHealth(float dmg, EntityLiving entity,
+    public static float DamageToMinecraftHealth(float dmg, EntityLivingBase entity,
                                                 UnitData data) {
 
         try {
@@ -24,7 +25,7 @@ public class HealthUtils {
         return 0;
     }
     
-    public static float vanillaHealthToActualHealth(float dmg, EntityLiving entity,
+    public static float vanillaHealthToActualHealth(float dmg, EntityLivingBase entity,
                                                     UnitData data) {
 
         try {
