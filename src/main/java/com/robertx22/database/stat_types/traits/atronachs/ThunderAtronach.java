@@ -3,7 +3,6 @@ package com.robertx22.database.stat_types.traits.atronachs;
 import java.util.Arrays;
 import java.util.List;
 
-import com.robertx22.database.stat_mods.multi.elemental.damage.SpellNatureDamageMulti;
 import com.robertx22.database.stat_mods.multi.elemental.damage.SpellThunderDamageMulti;
 import com.robertx22.database.stats.IAffectsOtherStats;
 import com.robertx22.database.stats.StatMod;
